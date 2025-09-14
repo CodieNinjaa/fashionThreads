@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Threads - Style Suggester</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a nice, clean font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* A simple class to hide/show views */
+        .hidden {
+            display: none;
+        }
+        /* Animation for the suggestions page */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }c:\Users\potla\Downloads\wrap-dresses.jpg c:\Users\potla\Downloads\empire-dresses.jpg c:\Users\potla\Downloads\belted-dresses.jpg
+        }
+        .animate-fade-in {
+            animation: fade-in 0.5s ease-out forwards;
+        }
+        /* Custom scrollbar for image carousels */
+        .image-carousel::-webkit-scrollbar {
+            height: 8px;
+        }
+        .image-carousel::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        .image-carousel::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .image-carousel::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <!-- App Container -->
+    <div id="app">
+
+        <!-- Header Section -->
+        <header class="bg-white shadow-sm">
+            <div class="container mx-auto px-4 py-4 flex items-center justify-center">
+                <!-- 
+                // LOGO PLACEMENT //
+                // Replace the src attribute below with the path to your logo image.
+                // Example: <img src="images/logo.png" alt="Fashion Threads Logo" class="h-8 w-auto mr-3"> 
+                -->
+                <img src="images/logo.png" alt="Fashion Threads Logo" class="h-8 w-auto mr-3" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="display:none;">
+                <img src="images/logo.png" alt="Fashion Threads Logo" class="h-20 w-auto mr-3">
+                    Fashion Threads
+                </h1>
+            </div>
+        </header>
+
+        <main class="container mx-auto px-4 py-8 md:py-12">
+            <!-- View 1: Input Form -->
+            <div id="form-view" class="max-w-3xl mx-auto">
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-semibold mb-2 text-center">Discover Your Perfect Style</h2>
+                    <p class="text-center text-gray-600 mb-6">Enter your details to get personalized fashion recommendations.</p>
+                    <form id="suggestion-form" class="space-y-6">
+                        <!-- Height & Weight -->
+                        <div class="grid md:grid-cols-2 gap-6 items-end">
+                            <div>
+                                <label for="height" class="block text-sm font-medium text-gray-700 mb-1">Height (cm)</label>
+                                <input type="number" id="height" placeholder="e.g., 170" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition" />
+                            </div>
+                            <div>
+                                <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Weight (kg)</label>
+                                <input type="number" id="weight" placeholder="e.g., 65" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition" />
+                            </div>
+                        </div>
+                        <!-- Gender -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                            <div id="gender-selector" class="flex space-x-2 bg-gray-100 p-1 rounded-lg">
+                                <button type="button" data-value="Female" class="gender-btn flex-1 text-center py-2 rounded-md transition-all text-sm font-semibold bg-white text-pink-600 shadow">Female</button>
+                                <button type="button" data-value="Male" class="gender-btn flex-1 text-center py-2 rounded-md transition-all text-sm font-semibold bg-transparent text-gray-600 hover:bg-white/50">Male</button>
+                            </div>
+                        </div>
+                        <!-- Skin Tone -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Your Skin Tone</label>
+                            <div id="skin-tone-selector" class="flex justify-center items-center space-x-2 md:space-x-3">
+                                <!-- Skin tone buttons will be injected by JS -->
+                            </div>
+                        </div>
+                        <!-- Body Shape -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Your Body Shape</label>
+                            <div id="body-shape-selector" class="grid grid-cols-3 md:grid-cols-5 gap-4">
+                                <!-- Body shape buttons will be injected by JS -->
+                            </div>
+                        </div>
+                        <p id="form-error" class="text-red-500 text-sm text-center hidden"></p>
+                        <button type="submit" class="w-full bg-pink-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-pink-700 focus:outline-none focus:ring-4 focus:ring-pink-300 transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+                            Get Suggestions
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-2"><path d="m9 18 6-6-6-6"/></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- View 2: Suggestions Page -->
+            <div id="suggestions-view" class="max-w-4xl mx-auto hidden">
+                 <div id="suggestions-content" class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                    <!-- Suggestions will be injected here by JS -->
+                 </div>
+            </div>
+        </main>
+
+        <!-- Footer Section -->
+        <footer class="bg-white mt-12">
+            <div class="container mx-auto px-4 py-6 text-center text-gray-500">
+                <p>&copy; 2024 Fashion Threads. All Rights Reserved.</p>
+                <p class="text-sm mt-1">Your Personal Style Guide</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- DATA ---
+            const skinTones = [
+                { name: "Fair", color: "#F8E8D9" }, { name: "Light", color: "#F3D9C6" },
+                { name: "Medium", color: "#E0BFA8" }, { name: "Olive", color: "#C9A98F" },
+                { name: "Tan", color: "#A57E64" }, { name: "Brown", color: "#8D6C5A" },
+                { name: "Deep", color: "#5B443A" },
+            ];
+
+            // --- BODY SHAPE IMAGE DATA ---
+            // The script will look for your images in a folder named 'images/body-shapes/'.
+            // Name your image files exactly as listed below (e.g., 'rectangle.png', 'triangle.jpg').
+            const bodyShapes = [
+                { name: 'Rectangle' },
+                { name: 'Triangle' },
+                { name: 'Hourglass' },
+                { name: 'Inverted Triangle' },
+                { name: 'Round' },
+            ];
+            
+            // --- IMAGE SUGGESTIONS ---
+            // The text here is used to generate the image file names.
+            // For example, "Scoop-neck tops" will look for an image named "scoop-neck-tops.jpg"
+            const suggestionData = {
+                Female: {
+                    'Rectangle': { description: "Your silhouette is balanced. The key is to create curves and add definition to your waist.", 
+                        tops: ["Scoop-neck tops", "Sweetheart tops", "Peplum blouses"], // e.g., images/tops/scoop-neck-tops.jpg
+                        bottoms: ["Flared jeans", "A-line skirts", "Cargo pants"], // e.g., images/bottoms/flared-jeans.jpg
+                        dresses: ["Empire dresses", "Wrap dresses", "Belted dresses"], // e.g., images/dresses/empire-dresses.jpg
+                        avoid: ["Overly boxy clothing", "Straight-cut dresses"] 
+                    },
+                    'Triangle': { description: "Your hips are wider than your bust. The goal is to accentuate your top half.", 
+                        tops: ["Boat neck tops", "Puff sleeves", "Layered tops"], // e.g., images/tops/boat-neck-tops.jpg
+                        bottoms: ["Straight-leg pants", "Bootcut jeans", "Flared skirts"], // e.g., images/bottoms/straight-leg-pants.jpg
+                        dresses: ["A-line dresses", "Fit-and-flare", "Embellished tops"], // e.g., images/dresses/a-line-dresses.jpg
+                        avoid: ["Clingy skirts", "Pants with side pockets"] 
+                    },
+                    'Hourglass': { description: "You have a well-defined waist. The aim is to highlight your natural curves.", 
+                        tops: ["Wrap tops", "V-necks", "Fitted tops"], // e.g., images/tops/wrap-tops.jpg
+                        bottoms: ["High-waisted pants", "Pencil skirts", "Skinny jeans"], // e.g., images/bottoms/high-waisted-pants.jpg
+                        dresses: ["Wrap dresses", "Bodycon dresses", "Fit-and-flare"], // e.g., images/dresses/wrap-dresses.jpg
+                        avoid: ["Shapeless clothing", "High necklines"] 
+                    },
+                    'Inverted Triangle': { description: "Your shoulders are wider than your hips. Add volume to your lower body.", 
+                        tops: ["V-necks", "Asymmetrical tops", "Soft fabrics"], // e.g., images/tops/v-necks.jpg
+                        bottoms: ["Wide-leg pants", "A-line skirts", "Bright bottoms"], // e.g., images/bottoms/wide-leg-pants.jpg
+                        dresses: ["Halter-neck", "A-line styles", "Fit-and-flare"], // e.g., images/dresses/halter-neck.jpg
+                        avoid: ["Shoulder pads", "Boat necklines"] 
+                    },
+                    'Round': { description: "Your torso is the fullest part of your body. The focus is on elongating your silhouette.", 
+                        tops: ["V-neck tops", "Empire-waist tops", "Flowy tunics"], // e.g., images/tops/v-neck-tops.jpg
+                        bottoms: ["Straight-leg pants", "Bootcut jeans", "Flat-front trousers"], // e.g., images/bottoms/straight-leg-pants.jpg
+                        dresses: ["Empire dresses", "A-line dresses", "Shift dresses"], // e.g., images/dresses/empire-dresses.jpg
+                        avoid: ["High necklines", "Clingy fabrics"] 
+                    }
+                },
+                Male: {
+                    'Rectangle': { description: "Your frame is balanced. The goal is to create a broader shoulder and a narrower waist.", 
+                        tops: ["Structured blazers", "Layered shirts", "Horizontal stripes"], // e.g., images/tops/structured-blazers.jpg
+                        bottoms: ["Straight-leg trousers", "Slim-fit trousers"], // e.g., images/bottoms/straight-leg-trousers.jpg
+                        outerwear: ["Padded jackets", "Structured coats", "Bomber jackets"], // e.g., images/outerwear/padded-jackets.jpg
+                        avoid: ["Double-breasted jackets", "Boxy t-shirts"] 
+                    },
+                    'Triangle': { description: "Your lower body is wider. The aim is to add bulk to your upper body.", 
+                        tops: ["Bold patterns", "Light-colored tops", "Fitted sweaters"], // e.g., images/tops/bold-patterns.jpg
+                        bottoms: ["Dark trousers", "Straight-leg jeans"], // e.g., images/bottoms/dark-trousers.jpg
+                        outerwear: ["Structured blazers", "Shoulder-padded jackets"], // e.g., images/outerwear/structured-blazers.jpg
+                        avoid: ["Polo necks", "Pants with busy patterns"] 
+                    },
+                    'Hourglass': { description: "Also called a Trapezoid shape. Your shoulders are broad, tapering to a narrower waist.", 
+                        tops: ["Slim-fit shirts", "V-neck sweaters", "Fitted t-shirts"], // e.g., images/tops/slim-fit-shirts.jpg
+                        bottoms: ["Slim trousers", "Straight-leg pants"], // e.g., images/bottoms/slim-trousers.jpg
+                        outerwear: ["Tailored blazers", "Fitted coats"], // e.g., images/outerwear/tailored-blazers.jpg
+                        avoid: ["Baggy clothing", "Unstructured jackets"] 
+                    },
+                    'Inverted Triangle': { description: "You have broad shoulders. The key is to add bulk to your lower half.", 
+                        tops: ["V-necks", "Simple crew necks", "Darker tops"], // e.g., images/tops/v-necks.jpg
+                        bottoms: ["Relaxed-fit pants", "Cargo pants", "Light colors"], // e.g., images/bottoms/relaxed-fit-pants.jpg
+                        outerwear: ["Unstructured jackets", "Simple bombers"], // e.g., images/outerwear/unstructured-jackets.jpg
+                        avoid: ["Wide lapels", "Shoulder pads"] 
+                    },
+                    'Round': { description: "Your mid-section is wider. The goal is to create a more defined silhouette.", 
+                        tops: ["Vertical stripes", "V-neck shirts", "Dark solid colors"], // e.g., images/tops/vertical-stripes.jpg
+                        bottoms: ["Relaxed trousers", "Straight-leg pants"], // e.g., images/bottoms/relaxed-trousers.jpg
+                        outerwear: ["Single-breasted jackets", "Overcoats"], // e.g., images/outerwear/single-breasted-jackets.jpg
+                        avoid: ["Tight shirts", "Large patterns"] 
+                    }
+                }
+            };
+            
+            const colorSuggestions = { /* Data is the same as React version */ };
+            colorSuggestions.Fair = [{ name: "Pastels", color: "#A7D2CB" }, { name: "Soft Blue", color: "#8AB6D6" }, { name: "Dusty Pink", color: "#D8A7B1" }, { name: "Lavender", color: "#B9A2D2" }];
+            colorSuggestions.Light = [{ name: "Camel", color: "#C19A6B" }, { name: "Khaki", color: "#8A9A5B" }, { name: "Peach", color: "#FFCBA4" }, { name: "Light Gray", color: "#D3D3D3" }];
+            colorSuggestions.Medium = [{ name: "Jewel Tones", color: "#9B111E" }, { name: "Emerald", color: "#50C878" }, { name: "Royal Blue", color: "#4169E1" }, { name: "Rich Purple", color: "#702963" }];
+            colorSuggestions.Olive = [{ name: "Earthy Tones", color: "#8B4513" }, { name: "Mustard", color: "#FFDB58" }, { name: "Terracotta", color: "#E2725B" }, { name: "Gold", color: "#FFD700" }];
+            colorSuggestions.Tan = [{ name: "Brights", color: "#FF007F" }, { name: "Cobalt Blue", color: "#0047AB" }, { name: "Orange", color: "#FFA500" }, { name: "White", color: "#FFFFFF" }];
+            colorSuggestions.Brown = [{ name: "Deep Reds", color: "#800000" }, { name: "Forest Green", color: "#228B22" }, { name: "Teal", color: "#008080" }, { name: "Cream", color: "#FFFDD0" }];
+            colorSuggestions.Deep = [{ name: "Vibrant Hues", color: "#FFFF00" }, { name: "Fuchsia", color: "#FF00FF" }, { name: "Kelly Green", color: "#4CBB17" }, { name: "Ruby Red", color: "#E0115F" }];
+
+
+            // --- STATE MANAGEMENT ---
+            let currentUserData = {
+                height: '',
+                weight: '',
+                gender: 'Female',
+                skinTone: '',
+                bodyShape: ''
+            };
+
+            // --- DOM ELEMENTS ---
+            const formView = document.getElementById('form-view');
+            const suggestionsView = document.getElementById('suggestions-view');
+            const suggestionForm = document.getElementById('suggestion-form');
+            const formError = document.getElementById('form-error');
+            const suggestionsContent = document.getElementById('suggestions-content');
+            
+            const genderSelector = document.getElementById('gender-selector');
+            const skinToneSelector = document.getElementById('skin-tone-selector');
+            const bodyShapeSelector = document.getElementById('body-shape-selector');
+
+            // --- INITIALIZATION ---
+            function initializeForm() {
+                // Populate Skin Tones
+                skinToneSelector.innerHTML = skinTones.map(tone => `
+                    <button type="button" data-value="${tone.name}" class="skin-tone-btn w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-200 transform hover:scale-110 focus:outline-none flex items-center justify-center" style="background-color: ${tone.color};" title="${tone.name}"></button>
+                `).join('');
+
+                // Populate Body Shapes with <img> tags
+                bodyShapeSelector.innerHTML = bodyShapes.map(shape => {
+                    const imageName = shape.name.toLowerCase().replace(/ /g, '-') + '.png'; // Assumes .png, can be .jpg
+                    const imageUrl = `images/body-shapes/${imageName}`;
+                    return `
+                        <div class="text-center">
+                            <button type="button" data-value="${shape.name}" class="body-shape-btn w-full h-32 md:h-40 p-2 rounded-lg border-2 transition-all flex items-center justify-center bg-gray-100 border-gray-200 text-gray-400 hover:border-pink-400 hover:text-pink-500">
+                                <img src="${imageUrl}" alt="${shape.name} Shape" class="h-full w-auto object-contain" onerror="this.onerror=null;this.src='https://placehold.co/200x300/F3F4F6/9CA3AF?text=${shape.name}';">
+                            </button>
+                            <p class="mt-2 text-sm font-semibold text-gray-600">${shape.name}</p>
+                        </div>
+                    `;
+                }).join('');
+
+                addEventListeners();
+            }
+
+            // --- EVENT LISTENERS ---
+            function addEventListeners() {
+                suggestionForm.addEventListener('submit', handleFormSubmit);
+
+                genderSelector.addEventListener('click', (e) => {
+                    if (e.target.matches('.gender-btn')) {
+                        currentUserData.gender = e.target.dataset.value;
+                        document.querySelectorAll('.gender-btn').forEach(btn => {
+                            btn.classList.remove('bg-white', 'text-pink-600', 'shadow');
+                            btn.classList.add('bg-transparent', 'text-gray-600', 'hover:bg-white/50');
+                        });
+                        e.target.classList.add('bg-white', 'text-pink-600', 'shadow');
+                        e.target.classList.remove('bg-transparent', 'text-gray-600', 'hover:bg-white/50');
+                    }
+                });
+
+                skinToneSelector.addEventListener('click', (e) => {
+                    const button = e.target.closest('.skin-tone-btn');
+                    if (button) {
+                        currentUserData.skinTone = button.dataset.value;
+                        document.querySelectorAll('.skin-tone-btn').forEach(btn => {
+                            btn.innerHTML = '';
+                            btn.classList.remove('ring-4', 'ring-pink-500', 'ring-offset-2');
+                        });
+                        button.classList.add('ring-4', 'ring-pink-500', 'ring-offset-2');
+                        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-white mix-blend-difference"><path d="M20 6 9 17l-5-5"/></svg>';
+                    }
+                });
+
+                bodyShapeSelector.addEventListener('click', (e) => {
+                    const button = e.target.closest('.body-shape-btn');
+                    if (button) {
+                        currentUserData.bodyShape = button.dataset.value;
+                        document.querySelectorAll('.body-shape-btn').forEach(btn => {
+                            btn.classList.remove('bg-pink-100', 'border-pink-500', 'text-pink-600');
+                            btn.classList.add('bg-gray-100', 'border-gray-200', 'text-gray-400');
+                            btn.nextElementSibling.classList.remove('text-pink-600');
+                        });
+                        button.classList.add('bg-pink-100', 'border-pink-500', 'text-pink-600');
+                        button.classList.remove('bg-gray-100', 'border-gray-200', 'text-gray-400');
+                        button.nextElementSibling.classList.add('text-pink-600');
+                    }
+                });
+            }
+
+            // --- LOGIC FUNCTIONS ---
+            function handleFormSubmit(e) {
+                e.preventDefault();
+                currentUserData.height = document.getElementById('height').value;
+                currentUserData.weight = document.getElementById('weight').value;
+
+                if (!currentUserData.height || !currentUserData.weight || !currentUserData.skinTone || !currentUserData.bodyShape) {
+                    formError.textContent = 'Please fill in all fields to get the best suggestions.';
+                    formError.classList.remove('hidden');
+                    return;
+                }
+                formError.classList.add('hidden');
+                
+                populateSuggestions();
+                formView.classList.add('hidden');
+                suggestionsView.classList.remove('hidden');
+                suggestionsView.classList.add('animate-fade-in');
+                window.scrollTo(0, 0);
+            }
+
+            function populateSuggestions() {
+                const suggestions = suggestionData[currentUserData.gender][currentUserData.bodyShape];
+                const colors = colorSuggestions[currentUserData.skinTone];
+
+                const colorHTML = `
+                    <div class="bg-pink-50 border border-pink-200 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold mb-3 text-pink-800">Colors That Flatter</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            ${colors.map(color => `
+                                <div class="text-center">
+                                    <div class="w-full h-16 rounded-lg shadow-inner" style="background-color: ${color.color};"></div>
+                                    <p class="text-sm font-medium text-gray-700 mt-2">${color.name}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>`;
+
+                const topsHTML = createImageCardHTML('Tops', suggestions.tops);
+                const bottomsHTML = createImageCardHTML('Bottoms', suggestions.bottoms);
+                const thirdCategoryTitle = currentUserData.gender === 'Female' ? 'Dresses' : 'Outerwear';
+                const thirdCategoryItems = currentUserData.gender === 'Female' ? suggestions.dresses : suggestions.outerwear;
+                const thirdCategoryHTML = createImageCardHTML(thirdCategoryTitle, thirdCategoryItems);
+                
+                const avoidHTML = `
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold mb-3 text-red-600">What to Avoid</h3>
+                        <ul class="space-y-2">
+                            ${suggestions.avoid.map(item => `
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 mr-2 mt-1 flex-shrink-0 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                    <span class="text-gray-700">${item}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>`;
+
+                suggestionsContent.innerHTML = `
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold text-pink-600">${currentUserData.bodyShape} Shape</h2>
+                        <p class="text-gray-600 mt-1">Suggestions for a <span class="font-semibold">${currentUserData.skinTone}</span> skin tone</p>
+                        <p class="text-gray-600 mt-4 max-w-xl mx-auto">${suggestions.description}</p>
+                    </div>
+                    <div class="space-y-8">
+                        ${colorHTML}
+                        ${topsHTML}
+                        ${bottomsHTML}
+                        ${thirdCategoryHTML}
+                        ${avoidHTML}
+                    </div>
+                    <button id="try-again-btn" class="mt-8 w-full bg-gray-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 transition-all duration-300 transform hover:scale-105">
+                        Try Again
+                    </button>
+                `;
+
+                document.getElementById('try-again-btn').addEventListener('click', () => {
+                    suggestionsView.classList.add('hidden');
+                    formView.classList.remove('hidden');
+                    window.scrollTo(0, 0);
+                });
+            }
+            
+            function createImageCardHTML(title, items) {
+                const category = title.toLowerCase().replace(/ /g, '-').replace('best-', '').replace('essential-', '');
+                return `
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">${title}</h3>
+                        <div class="flex overflow-x-auto space-x-4 pb-4 image-carousel">
+                            ${items.map(item => {
+                                const imageName = item.toLowerCase().replace(/ /g, '-') + '.jpg'; // or .png
+                                const imageUrl = `images/${category}/${imageName}`;
+                                return `
+                                    <div class="flex-shrink-0 w-40 text-center">
+                                        <img src="${imageUrl}" alt="${item}" class="w-full h-48 object-cover rounded-lg bg-gray-200 shadow-md" onerror="this.onerror=null;this.src='https://placehold.co/400x500/F3F4F6/9CA3AF?text=Image+Not+Found';">
+                                        <p class="mt-2 text-sm font-medium text-gray-700">${item}</p>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Start the application
+            initializeForm();
+        });
+    </script>
+</body>
+</html>
